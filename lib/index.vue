@@ -1,7 +1,7 @@
 <template>
     <div id="uppic">
         <slot></slot>
-        <input class="file" type="file" @change="getsrc" ref="file">
+        <input class="file" type="file" @change="getsrc" accept="image/*" ref="file">
         <div id="uppicBox" ref="uppicBox"  v-show="isuppicBox">
             <div class="imageBox">
                 <img id="pic-img" ref="picImg" :src="img.src" :style="{'transform':'translate3d('+transform.x+'px,'+transform.y+'px,0px) scale('+transform.scale+','+transform.scale+')','transition':'transform '+duration+'ms','width':img.w+'px','height':img.h+'px','margin-left':img.w/-2+'px','margin-top':img.h/-2+'px'}">
@@ -147,12 +147,14 @@ export default {
             if(Yw*Height<Yh*Width){
                 /* 以宽为基准缩放 */
                 me.img.w=Width
-                me.img.h=this.browser()=='iphone'?Yw*Width/Yh:Yh*Width/Yw
+                me.img.h=Yh*Width/Yw
+                // me.img.h=this.browser()=='iphone'?Yw*Width/Yh:Yh*Width/Yw
             
             }else{
                 /* 以高为基准缩放 */
                 me.img.h=Height
-                me.img.w=this.browser()=='iphone'?Yh*Height/Yw :Yw*Height/Yh
+                me.img.w=Yw*Height/Yh
+                // me.img.w=this.browser()=='iphone'?Yh*Height/Yw :Yw*Height/Yh
                 
             }
             
@@ -265,11 +267,12 @@ export default {
             let top=(this.img.h*scale-this.Cheight)/2
             let left=(this.img.w*scale-this.Cwidth)/2
             let bili
-            if(this.browser()=='iphone'){
-                bili=this.img.Yh/(this.img.w*scale)
-            }else{
-                bili=this.img.Yh/(this.img.h*scale)
-            }
+            bili=this.img.Yh/(this.img.h*scale)
+            // if(this.browser()=='iphone'){
+            //     bili=this.img.Yh/(this.img.w*scale)
+            // }else{
+            //     bili=this.img.Yh/(this.img.h*scale)
+            // }
 
             let sw=this.Cwidth*bili
             let sh=this.Cheight*bili
@@ -282,19 +285,24 @@ export default {
             canvas.height = dh;//设置canvas宽
             
             let Orientation=me.img.Orientation
-            if(Orientation>1){
-                this.drawPhoto(image,Orientation,function(img,shuoxiao){
-                    context.drawImage(img,sx/shuoxiao,sy/shuoxiao,sw/shuoxiao,sh/shuoxiao,0,0,dw,dh);//向画布上绘制图像
-                    var imageData = canvas.toDataURL('image/jpg');
-                    me.$emit('callback',imageData,me.data)
-                    me.cancel()
-                })
-            }else{
-                context.drawImage(image,sx,sy,sw,sh,0,0,dw,dh);//向画布上绘制图像
-                var imageData = canvas.toDataURL('image/jpg');//设置格式  
-                this.$emit('callback',imageData,me.data)
-                this.cancel()
-            }
+            // if(Orientation>1){
+            //     this.drawPhoto(image,Orientation,function(img,shuoxiao){
+            //         context.drawImage(img,sx/shuoxiao,sy/shuoxiao,sw/shuoxiao,sh/shuoxiao,0,0,dw,dh);//向画布上绘制图像
+            //         var imageData = canvas.toDataURL('image/jpg');
+            //         me.$emit('callback',imageData,me.data)
+            //         me.cancel()
+            //     })
+            // }else{
+            //     context.drawImage(image,sx,sy,sw,sh,0,0,dw,dh);//向画布上绘制图像
+            //     var imageData = canvas.toDataURL('image/jpg');//设置格式  
+            //     this.$emit('callback',imageData,me.data)
+            //     this.cancel()
+            // }
+            context.drawImage(image,sx,sy,sw,sh,0,0,dw,dh);//向画布上绘制图像
+            var imageData = canvas.toDataURL('image/jpg');//设置格式  
+            this.$emit('callback',imageData,me.data)
+            this.$emit('imgMeta',me.img)
+            this.cancel()
         },
         drawPhoto:function(img,dir,next){
 			 var image=new Image();

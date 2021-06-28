@@ -1,7 +1,7 @@
 {
-  "name": "vue-imgcut",
-  "version": "1.0.5",
-  "description": "vue mobile image clippings",
+  "name": "vue-imgcut-zzw",
+  "version": "1.0.0",
+  "description": "从vue-imgcut修改而来，快速上线，未PR",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,13 +13,9 @@
     "less": "^2.7.3",
     "less-loader": "^4.0.5"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/746655242/vue-imgcut"
-  },
   "keywords": [
-    "vue-imgcut"
+    "vue-imgcut-zzw"
   ],
-  "author": "746655242@qq.com",
+  "author": "zhahouming@hotmail.com",
   "license": "ISC"
 }
