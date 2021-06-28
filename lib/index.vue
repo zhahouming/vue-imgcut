@@ -32,6 +32,7 @@
 
 import "./exif.js"
 import Hammer from "hammerjs"
+import { getBase64Strings } from 'exif-rotate-js/lib';
 export default {
     name:'Uppic',
     data(){
@@ -87,13 +88,10 @@ export default {
         },
         getsrc(e){
             let me=this
-            let files=e.target.files[0]
-            let fileReader = new FileReader()
-			fileReader.onloadend=function(e){
-                me.img.src=e.target.result
+            getBase64Strings(e.target.files, { maxSize: 1004096 }).then(data => {
+                me.img.src = data[0];
                 me.$refs.picImg.onload=me.init;
-            }
-			fileReader.readAsDataURL(files)
+            })
         },
         init(e){
           
@@ -142,21 +140,24 @@ export default {
             this.Cwidth=Width;
             this.Cheight=Height;				
 
-           
+            // 无脑以宽为基准
+            me.img.w=Width
+            me.img.h=Yh*Width/Yw
+
             /*设置原图片 iPhone图片 */
-            if(Yw*Height<Yh*Width){
-                /* 以宽为基准缩放 */
-                me.img.w=Width
-                me.img.h=Yh*Width/Yw
-                // me.img.h=this.browser()=='iphone'?Yw*Width/Yh:Yh*Width/Yw
+            // if(Yw*Height<Yh*Width){
+            //     /* 以宽为基准缩放 */
+            //     me.img.w=Width
+            //     me.img.h=Yh*Width/Yw
+            //     // me.img.h=this.browser()=='iphone'?Yw*Width/Yh:Yh*Width/Yw
             
-            }else{
-                /* 以高为基准缩放 */
-                me.img.h=Height
-                me.img.w=Yw*Height/Yh
-                // me.img.w=this.browser()=='iphone'?Yh*Height/Yw :Yw*Height/Yh
+            // }else{
+            //     /* 以高为基准缩放 */
+            //     me.img.h=Height
+            //     me.img.w=Yw*Height/Yh
+            //     // me.img.w=this.browser()=='iphone'?Yh*Height/Yw :Yw*Height/Yh
                 
-            }
+            // }
             
            
         },
